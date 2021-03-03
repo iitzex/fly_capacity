@@ -1,0 +1,5 @@
+.vscode
+.DS_Store
+elato.csv
+ENV
+__pycache__
