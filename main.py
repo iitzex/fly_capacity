@@ -1,17 +1,14 @@
-import time
-
-import pandas as pd
 import requests
 from shapely.geometry.polygon import Polygon
 
 from airport import ICAO
 from boundry import inside
 
-FIR = Polygon([(29.3, 123.5), (23.3, 124.5), (21, 121.2),
+FIR = Polygon([(29.3, 123.5), (23.3, 124), (21, 121.2),
                (21, 117.3), (22.5, 117.3), (24.5, 120.2)])
-AN = Polygon([(29.3, 123.5), (25.5, 121.5), (24.5, 122), (25.5, 123.5)])
+AN = Polygon([(29.3, 123.5), (26.0, 121.5), (24.5, 121.3), (24.5, 123.7)])
 AE = Polygon([(25.5, 121.5), (25.5, 123.5), (23.3, 123.6),
-              (21, 121.3), (21, 118.6), (23.1, 120)])
+              (21, 121.3), (21, 117.6), (23.1, 120)])
 AS = Polygon([(23.1, 120), (21, 117.3), (23.4, 117.3), (24.7, 118.5)])
 AW = Polygon([(23.1, 120), (24.7, 118.5), (25.5, 120.5), (25.1, 121.3)])
 
@@ -111,6 +108,27 @@ def flights():
 
 if __name__ == "__main__":
     table = flights()
+    c_AN = 0
+    c_AE = 0
+    c_AS = 0
+    c_AW = 0
+    c_error = 0
 
     for v in table:
         print(v)
+        if v['sector'] == 'AN':
+            c_AN = c_AN + 1
+        elif v['sector'] == 'AE':
+            c_AE = c_AE + 1
+        elif v['sector'] == 'AS':
+            c_AS = c_AS + 1
+        elif v['sector'] == 'AW':
+            c_AW = c_AW + 1
+        else:
+            c_error = c_error + 1
+
+    print(f'AN: {c_AN}')
+    print(f'AE: {c_AE}')
+    print(f'AS: {c_AS}')
+    print(f'AW: {c_AW}')
+    print(f'Error: {c_error}')
