@@ -51,7 +51,6 @@ def feed():
 
 def flights():
     j = feed()
-    # print(j)
 
     count = 0
     table = []
@@ -106,16 +105,16 @@ def flights():
     return table
 
 
-if __name__ == "__main__":
-    table = flights()
+def run():
     c_AN = 0
     c_AE = 0
     c_AS = 0
     c_AW = 0
     c_error = 0
+    table = flights()
 
     for v in table:
-        print(v)
+        # print(v)
         if v['sector'] == 'AN':
             c_AN = c_AN + 1
         elif v['sector'] == 'AE':
@@ -127,8 +126,35 @@ if __name__ == "__main__":
         else:
             c_error = c_error + 1
 
-    print(f'AN: {c_AN}')
-    print(f'AE: {c_AE}')
-    print(f'AS: {c_AS}')
-    print(f'AW: {c_AW}')
-    print(f'Error: {c_error}')
+    # seat = []
+    # seat.append({'AN': f'{c_AN}'})
+    # seat.append({'AW': f'{c_AW}'})
+    # seat.append({'AE': f'{c_AE}'})
+    # seat.append({'AS': f'{c_AS}'})
+    # seat.append({'Error': f'{c_error}'})
+    seat = {}
+    seat['AN'] = f'{c_AN}'
+    seat['AW'] = f'{c_AW}'
+    seat['AE'] = f'{c_AE}'
+    seat['AS'] = f'{c_AS}'
+
+    sectors = ['AN', 'AW', 'AS', 'AE']
+    html_col = ''
+    for s in sectors:
+        # print(s, seat[s])
+        html_col += f"""
+        <div class="col">
+            <div class="card mb-3 rounded-3 shadow-sm">
+                <div class="card-header py-4">
+                <h1 class="display-1">{seat[s]}</h1>
+                <h4>{s}</h4>
+                </div>
+            </div>
+        </div> """
+
+    return html_col
+
+
+if __name__ == "__main__":
+    r = run()
+    print(r)
