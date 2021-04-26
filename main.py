@@ -114,7 +114,6 @@ def run():
     table = flights()
 
     for v in table:
-        # print(v)
         if v['sector'] == 'AN':
             c_AN = c_AN + 1
         elif v['sector'] == 'AE':
@@ -126,12 +125,6 @@ def run():
         else:
             c_error = c_error + 1
 
-    # seat = []
-    # seat.append({'AN': f'{c_AN}'})
-    # seat.append({'AW': f'{c_AW}'})
-    # seat.append({'AE': f'{c_AE}'})
-    # seat.append({'AS': f'{c_AS}'})
-    # seat.append({'Error': f'{c_error}'})
     seat = {}
     seat['AN'] = f'{c_AN}'
     seat['AW'] = f'{c_AW}'
