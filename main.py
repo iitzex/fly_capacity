@@ -1,52 +1,21 @@
-import requests
+import time
+
+import pandas as pd
 from shapely.geometry.polygon import Polygon
 
 from airport import ICAO
 from boundry import inside
+from fr24 import feed
 
 FIR = Polygon([(29.3, 123.5), (23.3, 124), (21, 121.2),
                (21, 117.3), (22.5, 117.3), (24.5, 120.2)])
 AN = Polygon([(29.3, 123.5), (26.0, 121.5), (24.5, 121.3), (24.5, 123.7)])
+AW = Polygon([(23.1, 120), (24.7, 118.5), (25.5, 120.5), (25.1, 121.3)])
+AS = Polygon([(23.1, 120), (21, 117.3), (23.4, 117.3), (24.7, 118.5)])
 AE = Polygon([(25.5, 121.5), (25.5, 123.5), (23.3, 123.6),
               (21, 121.3), (21, 117.6), (23.1, 120)])
-AS = Polygon([(23.1, 120), (21, 117.3), (23.4, 117.3), (24.7, 118.5)])
-AW = Polygon([(23.1, 120), (24.7, 118.5), (25.5, 120.5), (25.1, 121.3)])
 
-
-def feed():
-    headers = {
-        'authority': 'data-live.flightradar24.com',
-        'accept': 'application/json, text/javascript, */*; q=0.01',
-        'origin': 'https://www.flightradar24.com',
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36',
-        'dnt': '1',
-        'sec-fetch-site': 'same-site',
-        'sec-fetch-mode': 'cors',
-        'referer': 'https://www.flightradar24.com/24.39,121.06/6',
-        'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-    }
-
-    params = (
-        ('bounds', '29.00,20.32,113.15,128.97'),
-        ('faa', '0'),
-        ('satellite', '1'),
-        ('mlat', '0'),
-        ('flarm', '0'),
-        ('adsb', '1'),
-        ('gnd', '0'),
-        ('air', '1'),
-        ('vehicles', '0'),
-        ('estimated', '1'),
-        ('maxage', '14400'),
-        ('gliders', '0'),
-        ('stats', '1'),
-        ('enc', ''),
-    )
-
-    r = requests.get(
-        'https://data-live.flightradar24.com/zones/fcgi/feed.js', headers=headers, params=params)
-
-    return r.json()
+Volume = {'AN': 20, 'AW': 12, 'AS': 15, 'AE': 15}
 
 
 def flights():
@@ -94,14 +63,14 @@ def flights():
             'alt': level,
             'from': src,
             'to': dst,
-            'sector': sector
-            # 'timestamp': int(time.time())
+            'sector': sector,
+            'timestamp': int(time.time())
         }
         # print(count, callsign, lat, lon, level, src, dst)
         table.append(row)
 
-    # df = pd.DataFrame(table)
-    # df = df.set_index('cs')
+    df = pd.DataFrame(table)
+    print(df)
     return table
 
 
@@ -114,6 +83,7 @@ def run():
     table = flights()
 
     for v in table:
+        # print(v)
         if v['sector'] == 'AN':
             c_AN = c_AN + 1
         elif v['sector'] == 'AE':
@@ -126,24 +96,29 @@ def run():
             c_error = c_error + 1
 
     seat = {}
-    seat['AN'] = f'{c_AN}'
-    seat['AW'] = f'{c_AW}'
-    seat['AE'] = f'{c_AE}'
-    seat['AS'] = f'{c_AS}'
+    seat['AN'] = c_AN
+    seat['AW'] = c_AW
+    seat['AS'] = c_AS
+    seat['AE'] = c_AE
 
     sectors = ['AN', 'AW', 'AS', 'AE']
     html_col = ''
     for s in sectors:
         # print(s, seat[s])
+        danger_tag = ''
+        if seat[s] >= Volume[s]:
+            danger_tag = 'text-white bg-danger border-danger'
+
         html_col += f"""
         <div class="col">
-            <div class="card mb-3 rounded-3 shadow-sm">
+            <div class="card mb-3 rounded-3 shadow-sm {danger_tag}">
                 <div class="card-header py-4">
                 <h1 class="display-1">{seat[s]}</h1>
                 <h4>{s}</h4>
                 </div>
             </div>
         </div> """
+        # print(Volume[s])
 
     return html_col
 

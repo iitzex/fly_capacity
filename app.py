@@ -16,7 +16,7 @@ def index():
     current_time = now.strftime("%H:%M:%S")
 
     html += current_time
-    print(html)
+    # print(html)
 
     return render_template('index.html', html_col=html)
 
