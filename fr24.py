@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 def feed():
@@ -34,4 +35,8 @@ def feed():
     r = requests.get(
         'https://data-live.flightradar24.com/zones/fcgi/feed.js', headers=headers, params=params)
 
-    return r.json()
+    try:
+        j = r.json()
+    except json.decoder.JSONDecodeError as e:
+        print(e)
+    return j
