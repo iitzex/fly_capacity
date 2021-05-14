@@ -17,60 +17,64 @@ Volume = {'AN': 20, 'AW': 12, 'AS': 15, 'AE': 15}
 
 
 def flights():
-    j = feed()
+    try:
+        j = feed()
 
-    count = 0
-    table = []
-    for k, v in j.items():
-        if k == 'full_count' or k == 'version' or k == 'stats' or \
-                k == 'visible' or k == 'selected-aircraft' or k == 'copyright':
-            continue
+        count = 0
+        table = []
 
-        level = int(v[4])
-        if level < 18000:
-            continue
+        for k, v in j.items():
+            if k == 'full_count' or k == 'version' or k == 'stats' or \
+                    k == 'visible' or k == 'selected-aircraft' or k == 'copyright':
+                continue
 
-        callsign = v[16]
-        if callsign == '':
-            continue
+            level = int(v[4])
+            if level < 18000:
+                continue
 
-        lat = float(v[1])
-        lon = float(v[2])
+            callsign = v[16]
+            if callsign == '':
+                continue
 
-        if not inside(FIR, lat, lon):
-            continue
-        if inside(AN, lat, lon):
-            sector = 'AN'
-        elif inside(AE, lat, lon):
-            sector = 'AE'
-        elif inside(AS, lat, lon):
-            sector = 'AS'
-        elif inside(AW, lat, lon):
-            sector = 'AW'
-        else:
-            sector = "None"
+            lat = float(v[1])
+            lon = float(v[2])
 
-        src = ICAO(v[11])
-        dst = ICAO(v[12])
+            if not inside(FIR, lat, lon):
+                continue
+            if inside(AN, lat, lon):
+                sector = 'AN'
+            elif inside(AE, lat, lon):
+                sector = 'AE'
+            elif inside(AS, lat, lon):
+                sector = 'AS'
+            elif inside(AW, lat, lon):
+                sector = 'AW'
+            else:
+                sector = "None"
 
-        count = count + 1
-        row = {
-            'cs': callsign,
-            'lat': lat,
-            'lon': lon,
-            'alt': level,
-            'from': src,
-            'to': dst,
-            'sector': sector,
-            'timestamp': int(time.time())
-        }
-        # print(count, callsign, lat, lon, level, src, dst)
-        table.append(row)
+            src = ICAO(v[11])
+            dst = ICAO(v[12])
 
-    df = pd.DataFrame(table)
-    print(df)
-    return table
+            count = count + 1
+            row = {
+                'cs': callsign,
+                'lat': lat,
+                'lon': lon,
+                'alt': level,
+                'from': src,
+                'to': dst,
+                'sector': sector,
+                'timestamp': int(time.time())
+            }
+            # print(count, callsign, lat, lon, level, src, dst)
+            table.append(row)
 
+        df = pd.DataFrame(table)
+        print(df)
+        return table
+
+    except UnboundLocalError as e:
+        pass
 
 def run():
     c_AN = 0
