@@ -75,6 +75,8 @@ def flights():
 
     except UnboundLocalError as e:
         pass
+    except TypeError as e:
+        pass
 
 def run():
     c_AN = 0
