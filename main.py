@@ -86,46 +86,49 @@ def run():
     c_error = 0
     table = flights()
 
-    for v in table:
-        # print(v)
-        if v['sector'] == 'AN':
-            c_AN = c_AN + 1
-        elif v['sector'] == 'AE':
-            c_AE = c_AE + 1
-        elif v['sector'] == 'AS':
-            c_AS = c_AS + 1
-        elif v['sector'] == 'AW':
-            c_AW = c_AW + 1
-        else:
-            c_error = c_error + 1
+    try:
+	    for v in table:
+	        # print(v)
+	        if v['sector'] == 'AN':
+	            c_AN = c_AN + 1
+	        elif v['sector'] == 'AE':
+	            c_AE = c_AE + 1
+	        elif v['sector'] == 'AS':
+	            c_AS = c_AS + 1
+	        elif v['sector'] == 'AW':
+	            c_AW = c_AW + 1
+	        else:
+	            c_error = c_error + 1
 
-    seat = {}
-    seat['AN'] = c_AN
-    seat['AW'] = c_AW
-    seat['AS'] = c_AS
-    seat['AE'] = c_AE
+	    seat = {}
+	    seat['AN'] = c_AN
+	    seat['AW'] = c_AW
+	    seat['AS'] = c_AS
+	    seat['AE'] = c_AE
 
-    sectors = ['AS', 'AW', 'AE', 'AN']
-    html_col = ''
-    for s in sectors:
-        # print(s, seat[s])
-        danger_tag = ''
-        if seat[s] >= Volume[s]:
-            danger_tag = 'text-white bg-danger border-danger'
+	    sectors = ['AS', 'AW', 'AE', 'AN']
+	    html_col = ''
+	    for s in sectors:
+	        # print(s, seat[s])
+	        danger_tag = ''
+	        if seat[s] >= Volume[s]:
+	            danger_tag = 'text-white bg-danger border-danger'
 
-        html_col += f"""
-        <div class="col">
-            <div class="card mb-3 rounded-3 shadow-sm {danger_tag}">
-                <div class="card-header py-4">
-                <h1 class="display-1">{seat[s]}</h1>
-                <h4>{s}</h4>
-                </div>
-            </div>
-        </div> """
-        # print(Volume[s])
+	        html_col += f"""
+	        <div class="col">
+	            <div class="card mb-3 rounded-3 shadow-sm {danger_tag}">
+	                <div class="card-header py-4">
+	                <h1 class="display-1">{seat[s]}</h1>
+	                <h4>{s}</h4>
+	                </div>
+	            </div>
+	        </div> """
+	        # print(Volume[s])
 
-    return html_col
-
+	    return html_col
+    	
+    except TypeError as e:
+    	pass
 
 if __name__ == "__main__":
     r = run()
