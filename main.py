@@ -87,9 +87,6 @@ def run():
     table = flights()
 
     try:
-    	if table is None:
-    		return ''
-
 	    for v in table:
 	        # print(v)
 	        if v['sector'] == 'AN':
