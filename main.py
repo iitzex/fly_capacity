@@ -87,6 +87,9 @@ def run():
     table = flights()
 
     try:
+    	if table is None:
+    		return ''
+
 	    for v in table:
 	        # print(v)
 	        if v['sector'] == 'AN':
@@ -128,7 +131,7 @@ def run():
 	    return html_col
     	
     except TypeError as e:
-    	pass
+    	return ''
 
 if __name__ == "__main__":
     r = run()
