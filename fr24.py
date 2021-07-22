@@ -5,14 +5,17 @@ import json
 def feed():
     headers = {
         'authority': 'data-live.flightradar24.com',
-        'accept': 'application/json, text/javascript, */*; q=0.01',
-        'origin': 'https://www.flightradar24.com',
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36',
+        'sec-ch-ua': '^\\^',
         'dnt': '1',
+        'sec-ch-ua-mobile': '?0',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36 Edg/91.0.864.71',
+        'accept': '*/*',
+        'origin': 'https://www.flightradar24.com',
         'sec-fetch-site': 'same-site',
         'sec-fetch-mode': 'cors',
-        'referer': 'https://www.flightradar24.com/24.39,121.06/6',
-        'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+        'sec-fetch-dest': 'empty',
+        'referer': 'https://www.flightradar24.com/',
+        'accept-language': 'zh-TW,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,zh-CN;q=0.5',
     }
 
     params = (
@@ -37,6 +40,8 @@ def feed():
 
     try:
         j = r.json()
+        print(j)
+
     except json.decoder.JSONDecodeError as e:
         print(e)
     return j
